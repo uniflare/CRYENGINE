@@ -88,7 +88,9 @@ bool CCVarsWhiteList::IsWhiteListed(const string& command, bool silent)
 	{
 		pCommandMod++;
 	}
-	
+
+// Allow dumping cvars in release build
+	WHITELIST("dumpvars");
 	WHITELIST("sys_game_folder");
 	
 	WHITELIST("map");
