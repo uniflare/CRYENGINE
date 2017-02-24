@@ -12,6 +12,9 @@
 #include <CryCore/CryCrc32.h>
 #include "Timer.h"
 
+// Debug in release mode
+#define _DEBUG_ALLOW_CVAR_DUMP 1
+
 //forward declaration
 struct IIpnut;
 struct INetwork;
@@ -249,7 +252,7 @@ protected: // ------------------------------------------------------------------
 	void AuditCVars(IConsoleCmdArgs* pArg);
 #endif // ALLOW_AUDIT_CVARS
 
-#ifndef _RELEASE
+#ifdef _DEBUG_ALLOW_CVAR_DUMP
 	// will be removed once the HTML version is good enough
 	void DumpCommandsVarsTxt(const char* prefix);
 	void DumpVarsTxt(const bool includeCheat);

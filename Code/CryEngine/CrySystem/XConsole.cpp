@@ -361,7 +361,7 @@ void Command_AuditCVars(IConsoleCmdArgs* pArg)
 }
 #endif // ALLOW_AUDIT_CVARS
 
-#if !defined(_RELEASE) && !CRY_PLATFORM_LINUX && !CRY_PLATFORM_ANDROID && !CRY_PLATFORM_APPLE
+#if _DEBUG_ALLOW_CVAR_DUMP && !CRY_PLATFORM_LINUX && !CRY_PLATFORM_ANDROID && !CRY_PLATFORM_APPLE
 void Command_DumpCommandsVars(IConsoleCmdArgs* Cmd)
 {
 	const char* arg = "";
@@ -465,7 +465,7 @@ void CXConsole::Init(CSystem* pSystem)
 
 		ITexture* pTex = 0;
 
-		// This texture is already loaded by the renderer. It's ref counted so there is no wasted space.
+	// This texture is already loaded by the renderer. It's ref counted so there is no wasted space.
 		pTex = pSystem->GetIRenderer()->EF_LoadTexture("EngineAssets/Textures/White.dds", FT_DONT_STREAM | FT_DONT_RELEASE);
 		if (pTex)
 			m_nWhiteTexID = pTex->GetTextureID();
@@ -485,7 +485,7 @@ void CXConsole::Init(CSystem* pSystem)
 	REGISTER_COMMAND("audit_cvars", &Command_AuditCVars, VF_NULL, "Logs all console commands and cvars");
 #endif // ALLOW_AUDIT_CVARS
 
-#if !defined(_RELEASE) && !(CRY_PLATFORM_LINUX || CRY_PLATFORM_ANDROID) && !CRY_PLATFORM_APPLE
+#if _DEBUG_ALLOW_CVAR_DUMP && !(CRY_PLATFORM_LINUX || CRY_PLATFORM_ANDROID) && !CRY_PLATFORM_APPLE
 	REGISTER_COMMAND("DumpCommandsVars", &Command_DumpCommandsVars, VF_NULL,
 	                 "This console command dumps all console variables and commands to disk\n"
 	                 "DumpCommandsVars [prefix]");
@@ -2034,7 +2034,7 @@ void CXConsole::AuditCVars(IConsoleCmdArgs* pArg)
 #endif // ALLOW_AUDIT_CVARS
 
 //////////////////////////////////////////////////////////////////////////
-#ifndef _RELEASE
+#ifdef _DEBUG_ALLOW_CVAR_DUMP
 void CXConsole::DumpCommandsVarsTxt(const char* prefix)
 {
 	FILE* f0 = fopen("consolecommandsandvars.txt", "w");
