@@ -790,8 +790,6 @@ bool CGame::Init(/*IGameFramework* pFramework*/)
 	GetISystem()->GetPlatformOS()->AddListener(this, "CGame");
 	gEnv->pSystem->GetISystemEventDispatcher()->RegisterListener(this);
 
-	LoadActionMaps("libs/config/defaultProfile.xml");
-	InlineInitializationProcessing("CGame::Init LoadActionMaps");
 	InitScriptBinds();
 
 	InlineInitializationProcessing("CGame::Init InitScriptBinds");
@@ -851,6 +849,9 @@ bool CGame::Init(/*IGameFramework* pFramework*/)
 	{
 		gEnv->pSystem->GetPlatformOS()->UserDoSignIn(0); // sign in the default user
 	}
+
+	LoadActionMaps("libs/config/defaultProfile.xml");
+	InlineInitializationProcessing("CGame::Init LoadActionMaps");
 
 #if CRY_PLATFORM_DURANGO
 	XboxLiveGameEvents::CreateGUID(m_playerSessionId);
@@ -3764,22 +3765,22 @@ void CGame::LoadActionMaps(const char* filename)
 		const char* userId = "UNKNOWN";
 		if (userCount == 0)
 		{
-			if (gEnv->pSystem->IsDevMode())
-			{
-			#ifndef _RELEASE
+//			if (gEnv->pSystem->IsDevMode())
+//			{
+//			#ifndef _RELEASE
 				//In devmode and not release get the default user if no users are signed in e.g. autotesting, map on the command line
 				pProfile = pPPMgr->GetDefaultProfile();
 				if (pProfile)
 				{
 					userId = pProfile->GetUserId();
 				}
-			#endif      // #ifndef _RELEASE
-			}
-			else
-			{
-				CryFatalError("[PlayerProfiles] CGameContext::StartGame: No users logged in");
-				return;
-			}
+//			#endif      // #ifndef _RELEASE
+//			}
+//			else
+//			{
+//				CryFatalError("[PlayerProfiles] CGameContext::StartGame: No users logged in");
+//				return;
+//			}
 		}
 
 		if (userCount > 0)
