@@ -1634,14 +1634,15 @@ bool CPlayerInput::OnActionUse(EntityId entityId, const ActionId& actionId, int 
 
 bool CPlayerInput::OnActionThirdPerson(EntityId entityId, const ActionId& actionId, int activationMode, float value)
 {
-	if (!gEnv->pSystem->IsDevMode())
-		return false;
+	// Enable third person in release mode
+	//if (!gEnv->pSystem->IsDevMode())
+	//	return false;
 
-	if (!m_pPlayer->GetSpectatorMode() && m_pPlayer->m_pGameFramework->CanCheat())
-	{
+	//if (!m_pPlayer->GetSpectatorMode() && m_pPlayer->m_pGameFramework->CanCheat())
+	//{
 		if (!m_pPlayer->GetLinkedVehicle())
 			m_pPlayer->ToggleThirdPerson();
-	}
+	//}
 	return false;
 }
 #ifdef INCLUDE_DEBUG_ACTIONS
