@@ -848,6 +848,13 @@ end_sources()
 
 CryFileContainer(CryCommon SOLUTION_FOLDER Common)
 
+# Only for VS
+if (${CMAKE_GENERATOR} MATCHES "^Visual Studio")
+	# Fix to add CryCommon includes in VS ide
+	configure_file ("CryCommon.vcxproj.user.in" "${CMAKE_CURRENT_BINARY_DIR}/CryCommon.vcxproj.user")
+	configure_file ("CryCommon.props" "${CMAKE_CURRENT_BINARY_DIR}/CryCommon.props")
+endif()
+
 macro(install_headers)
 	foreach(dir ${ARGN})
 		install(DIRECTORY ${dir} DESTINATION include/CryCommon)
@@ -860,4 +867,3 @@ install_headers(CryFlowGraph CryFont CryGame CryInput CryLiveCreate CryLobby Cry
 install_headers(CryMemory CryMono CryMovie CryNetwork CryParticleSystem CryPhysics)
 install_headers(CryRenderer CrySandbox CryScriptSystem CrySerialization CryString)
 install_headers(CrySystem CryThreading)
-
