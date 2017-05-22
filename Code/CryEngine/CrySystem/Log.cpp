@@ -156,15 +156,17 @@ void CLog::RegisterConsoleVariables()
 
 #ifdef  _RELEASE
 	#if defined(RELEASE_LOGGING)
-		#define DEFAULT_VERBOSITY 0
+		//#define DEFAULT_VERBOSITY 0
 	#elif defined(DEDICATED_SERVER)
-		#define DEFAULT_VERBOSITY 0
+		//#define DEFAULT_VERBOSITY 0
 	#else
-		#define DEFAULT_VERBOSITY -1
+		//#define DEFAULT_VERBOSITY -1
 	#endif
 #else
-	#define DEFAULT_VERBOSITY 3
+	//#define DEFAULT_VERBOSITY 3
 #endif
+ 	//DEBUG// Full console output by default
+ 	#define DEFAULT_VERBOSITY 4
 
 	if (console)
 	{
