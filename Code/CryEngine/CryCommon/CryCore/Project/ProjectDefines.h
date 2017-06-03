@@ -12,6 +12,10 @@
 // This was chewing up a lot of CPU time just waiting for a connection
 #define NO_LIVECREATE
 
+#ifndef CRY_FEATURE_SCALEFORM_HELPER
+#define CRY_FEATURE_SCALEFORM_HELPER 1
+#endif
+
 // Scaleform base configuration
 #if defined(DEDICATED_SERVER)
 	#undef INCLUDE_SCALEFORM_SDK   // Not used in dedicated server
