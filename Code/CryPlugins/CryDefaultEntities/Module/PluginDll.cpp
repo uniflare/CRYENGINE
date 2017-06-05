@@ -18,7 +18,8 @@ class CSystemEventListener : public ISystemEventListener
 public:
 	~CSystemEventListener()
 	{
-		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+		if(gEnv->pSystem)
+			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 	}
 
 	virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override

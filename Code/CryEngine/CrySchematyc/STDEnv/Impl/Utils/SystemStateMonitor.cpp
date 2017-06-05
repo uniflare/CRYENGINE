@@ -13,7 +13,8 @@ CSystemStateMonitor::CSystemStateMonitor()
 
 CSystemStateMonitor::~CSystemStateMonitor()
 {
-	gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	if(gEnv->pSystem)
+		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 }
 
 void CSystemStateMonitor::OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam)

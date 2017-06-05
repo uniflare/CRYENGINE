@@ -73,7 +73,8 @@ CCore::CCore()
 
 CCore::~CCore()
 {
-	gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	if(gEnv->pSystem)
+		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 
 	m_pLog->Shutdown();
 

@@ -33,7 +33,8 @@ CSTDEnv::CSTDEnv()
 
 CSTDEnv::~CSTDEnv()
 {
-	gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	if(gEnv->pSystem)
+		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 
 	s_pInstance = nullptr;
 }

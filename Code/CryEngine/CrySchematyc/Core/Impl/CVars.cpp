@@ -36,6 +36,9 @@ void CVars::Register()
 
 void CVars::Unregister()
 {
+	if (!gEnv->pConsole)
+		return;
+
 	gEnv->pConsole->UnregisterVariable("sc_RootFolder");
 	gEnv->pConsole->UnregisterVariable("sc_IgnorePAKFiles");
 	gEnv->pConsole->UnregisterVariable("sc_IgnoreUnderscoredFolders");

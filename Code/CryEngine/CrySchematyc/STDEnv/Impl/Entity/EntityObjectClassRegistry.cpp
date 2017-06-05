@@ -58,7 +58,8 @@ SEntityObjectClass::SEntityObjectClass(const SEntityObjectClass& rhs)
 
 SEntityObjectClass::~SEntityObjectClass()
 {
-	entityClassDesc.pScriptTable->Release();
+	if(entityClassDesc.pScriptTable)
+		entityClassDesc.pScriptTable->Release();
 }
 
 void CEntityObjectClassRegistry::Init()
