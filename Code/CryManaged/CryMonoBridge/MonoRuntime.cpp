@@ -118,7 +118,7 @@ bool CMonoRuntime::Initialize()
 	char sMonoEtc[_MAX_PATH];
 	sprintf_s(sMonoEtc, "%s\\bin\\common\\Mono\\etc", engineRoot);
 
-	if (!gEnv->pCryPak->IsFileExist(sMonoLib) || !gEnv->pCryPak->IsFileExist(sMonoEtc))
+	if (!gEnv->pCryPak->IsFileExist(sMonoLib, ICryPak::eFileLocation_OnDisk) || !gEnv->pCryPak->IsFileExist(sMonoEtc, ICryPak::eFileLocation_OnDisk))
 	{
 		CryLogAlways("Failed to initialize Mono runtime, Mono directory was not found or incomplete in Engine directory");
 		delete this;
