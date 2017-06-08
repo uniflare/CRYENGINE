@@ -802,9 +802,8 @@ bool CSystem::UnloadEngineModule(const char* dllName, const char* moduleClassNam
 	dllfile = PathUtil::ReplaceExtension(dllfile, "dll");
 #endif
 
-#if !defined(_LIB)
-	bSuccess = UnloadDLL(dllfile.c_str());
-#endif // #if !defined(_LIB)
+	if(stl::find_in_map(m_moduleDLLHandles, CCryNameCRC(dllName), NULL))
+		bSuccess = UnloadDLL(dllfile.c_str());
 
 	return bSuccess;
 }
