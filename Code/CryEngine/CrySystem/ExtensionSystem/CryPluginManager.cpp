@@ -17,11 +17,12 @@ struct SPluginModule
 {
 	SPluginModule() {}
 
-	SPluginModule(const char* path, const char* className)
+	SPluginModule(const char* path, const char* className, bool bIsStaticLib)
 		: m_engineModulePath(path)
 		, m_className(className)
 	{
-		GetISystem()->InitializeEngineModule(path, className, false);
+		if(!bIsStaticLib) // only required for dynamic modules
+			GetISystem()->InitializeEngineModule(path, className, false);
 	}
 
 	SPluginModule(SPluginModule& other)
@@ -186,15 +187,20 @@ bool CCryPluginManager::Initialize()
 #ifndef _RELEASE
 	REGISTER_COMMAND("sys_reload_plugin", ReloadPluginCmd, 0, "Reload a plugin - not implemented yet");
 #endif
+#ifdef _LIB
+#define BOOL_IS_DEFINED_LIB true
+#else
+#define BOOL_IS_DEFINED_LIB false
+#endif
 
 	// Start with loading the default engine plug-ins
-	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CryDefaultEntities", "Plugin_CryDefaultEntities");
+	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CryDefaultEntities", "Plugin_CryDefaultEntities", BOOL_IS_DEFINED_LIB);
 	//Schematyc + Schematyc Standard Enviroment
-	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySchematycCore", "Plugin_SchematycCore");
-	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySchematycSTDEnv", "Plugin_SchematycSTDEnv");
+	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySchematycCore", "Plugin_SchematycCore", BOOL_IS_DEFINED_LIB);
+	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySchematycSTDEnv", "Plugin_SchematycSTDEnv", BOOL_IS_DEFINED_LIB);
 
-	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySensorSystem", "Plugin_CrySensorSystem");
-
+	LoadPluginFromDisk(EPluginType::EPluginType_CPP, "CrySensorSystem", "Plugin_CrySensorSystem", BOOL_IS_DEFINED_LIB);
+#undef BOOL_IS_DEFINED_LIB
 	return LoadExtensionFile("cryplugin.csv");
 }
 
@@ -311,7 +317,7 @@ bool CCryPluginManager::LoadExtensionFile(const char* szFilename)
 	return bResult;
 }
 
-bool CCryPluginManager::LoadPluginFromDisk(EPluginType type, const char* path, const char* className)
+bool CCryPluginManager::LoadPluginFromDisk(EPluginType type, const char* path, const char* className, bool bIsStaticLib)
 {
 	CryLogAlways("Loading plugin %s", path);
 
@@ -323,7 +329,7 @@ bool CCryPluginManager::LoadPluginFromDisk(EPluginType type, const char* path, c
 		{
 			// Load the module, note that this calls ISystem::InitializeEngineModule
 			// Automatically unloads in destructor
-			SPluginModule module(path, className);
+			SPluginModule module(path, className, bIsStaticLib);
 
 			ICryFactoryRegistry* pFactoryReg = gEnv->pSystem->GetCryFactoryRegistry();
 			CRY_ASSERT(pFactoryReg);

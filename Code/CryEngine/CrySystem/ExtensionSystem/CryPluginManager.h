@@ -37,7 +37,7 @@ public:
 	virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override;
 
 protected:
-	virtual bool                        LoadPluginFromDisk(EPluginType type, const char* path, const char* className) override;
+	virtual bool                        LoadPluginFromDisk(EPluginType type, const char* path, const char* className, bool bIsStaticLib = false) override;
 
 	virtual std::shared_ptr<ICryPlugin> QueryPluginById(const CryClassID& classID) const override;
 	virtual std::shared_ptr<ICryPlugin> AcquirePluginById(const CryClassID& classID) override;
