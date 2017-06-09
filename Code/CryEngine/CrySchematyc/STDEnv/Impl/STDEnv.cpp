@@ -23,7 +23,11 @@ inline bool WantUpdate()
 	return !gEnv->pGameFramework->IsGamePaused() && (gEnv->pSystem->GetSystemGlobalState() == ESYSTEM_GLOBAL_STATE_RUNNING);
 }
 } // Anonymous
+#ifndef _LIB
 SSystemGlobalEnvironment * CSTDEnv::s_pEnv = gEnv;
+#else
+SSystemGlobalEnvironment * CSTDEnv::s_pEnv = &gEnv;
+#endif
 
 CSTDEnv::CSTDEnv()
 	: m_pSystemStateMonitor(new CSystemStateMonitor())
@@ -35,9 +39,13 @@ CSTDEnv::CSTDEnv()
 
 CSTDEnv::~CSTDEnv()
 {
-	if (gEnv && s_pEnv == gEnv && gEnv->pSystem)
-		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
-
+#ifndef _LIB
+	if (gEnv == s_pEnv)
+#endif
+	{
+		if (gEnv && gEnv->pSystem)
+			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	}
 	s_pInstance = nullptr;
 }
 

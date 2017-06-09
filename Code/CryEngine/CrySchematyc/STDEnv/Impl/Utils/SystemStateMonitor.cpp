@@ -5,7 +5,11 @@
 
 namespace Schematyc
 {
-SSystemGlobalEnvironment *	CSystemStateMonitor::s_pEnv = gEnv;
+#ifndef _LIB
+	SSystemGlobalEnvironment *	CSystemStateMonitor::s_pEnv = gEnv;
+#else
+	SSystemGlobalEnvironment *	CSystemStateMonitor::s_pEnv = &gEnv;
+#endif
 
 CSystemStateMonitor::CSystemStateMonitor()
 	: m_bLoadingLevel(false)
@@ -15,8 +19,13 @@ CSystemStateMonitor::CSystemStateMonitor()
 
 CSystemStateMonitor::~CSystemStateMonitor()
 {
-	if (gEnv && s_pEnv == gEnv && gEnv->pSystem)
-		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+#ifndef _LIB
+	if (gEnv == s_pEnv)
+#endif
+	{
+		if (gEnv && gEnv->pSystem)
+			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	}
 }
 
 void CSystemStateMonitor::OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam)

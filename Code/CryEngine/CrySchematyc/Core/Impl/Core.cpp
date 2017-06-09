@@ -54,8 +54,11 @@ inline bool WantUpdate()
 	return !gEnv->pGameFramework->IsGamePaused() && (gEnv->pSystem->GetSystemGlobalState() == ESYSTEM_GLOBAL_STATE_RUNNING);
 }
 } // Anonymous
-
+#ifndef _LIB
 SSystemGlobalEnvironment * CCore::s_pEnv = gEnv;
+#else
+SSystemGlobalEnvironment * CCore::s_pEnv = &gEnv;
+#endif
 static const char* g_szScriptsFolder = "scripts";
 static const char* g_szSettingsFolder = "settings";
 
@@ -74,8 +77,13 @@ CCore::CCore()
 
 CCore::~CCore()
 {
-	if(gEnv && gEnv == s_pEnv && gEnv->pSystem)
-		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+#ifndef _LIB
+	if (gEnv == s_pEnv)
+#endif
+	{
+		if (gEnv && gEnv->pSystem)
+			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+	}
 
 	m_pLog->Shutdown();
 

@@ -88,11 +88,16 @@ CEntityObjectDebugger::CEntityObjectDebugger()
 
 CEntityObjectDebugger::~CEntityObjectDebugger()
 {
-	if (gEnv && CSTDEnv::s_pEnv == gEnv && gEnv->pSystem)
+#ifndef _LIB
+	if (gEnv == CSTDEnv::s_pEnv)
+#endif
 	{
-		gEnv->pConsole->UnregisterVariable("sc_EntityDebugConfig");
-		gEnv->pConsole->UnregisterVariable("sc_EntityDebugFilter");
-		gEnv->pConsole->UnregisterVariable("sc_EntityDebugTextPos");
+		if (gEnv && gEnv->pSystem)
+		{
+			gEnv->pConsole->UnregisterVariable("sc_EntityDebugConfig");
+			gEnv->pConsole->UnregisterVariable("sc_EntityDebugFilter");
+			gEnv->pConsole->UnregisterVariable("sc_EntityDebugTextPos");
+		}
 	}
 }
 

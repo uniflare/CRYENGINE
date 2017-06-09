@@ -13,15 +13,24 @@ USE_CRYPLUGIN_FLOWNODES
 IEntityRegistrator* IEntityRegistrator::g_pFirst = nullptr;
 IEntityRegistrator* IEntityRegistrator::g_pLast = nullptr;
 
+#ifndef _LIB
 static SSystemGlobalEnvironment * s_pEnv = gEnv;
+#else
+static SSystemGlobalEnvironment * s_pEnv = &gEnv;
+#endif
 
 class CSystemEventListener : public ISystemEventListener
 {
 public:
 	~CSystemEventListener()
 	{
-		if(gEnv && gEnv == s_pEnv && gEnv->pSystem)
-			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+#ifndef _LIB
+		if (gEnv == s_pEnv)
+#endif
+		{
+			if (gEnv && gEnv->pSystem)
+				gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
+		}
 	}
 
 	virtual void OnSystemEvent(ESystemEvent event, UINT_PTR wparam, UINT_PTR lparam) override
