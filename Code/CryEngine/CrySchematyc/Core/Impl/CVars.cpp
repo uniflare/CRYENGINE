@@ -5,6 +5,7 @@
 
 namespace Schematyc
 {
+SSystemGlobalEnvironment * CVars::s_pEnv = gEnv;
 ICVar* CVars::sc_RootFolder = nullptr;
 int CVars::sc_IgnorePAKFiles = 0;
 int CVars::sc_IgnoreUnderscoredFolders = 1;
@@ -36,7 +37,7 @@ void CVars::Register()
 
 void CVars::Unregister()
 {
-	if (!gEnv->pConsole)
+	if (!gEnv || gEnv != s_pEnv || !gEnv->pConsole)
 		return;
 
 	gEnv->pConsole->UnregisterVariable("sc_RootFolder");

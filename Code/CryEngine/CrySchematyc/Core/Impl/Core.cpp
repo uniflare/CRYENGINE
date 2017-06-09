@@ -55,6 +55,7 @@ inline bool WantUpdate()
 }
 } // Anonymous
 
+SSystemGlobalEnvironment * CCore::s_pEnv = gEnv;
 static const char* g_szScriptsFolder = "scripts";
 static const char* g_szSettingsFolder = "settings";
 
@@ -73,7 +74,7 @@ CCore::CCore()
 
 CCore::~CCore()
 {
-	if(gEnv->pSystem)
+	if(gEnv && gEnv == s_pEnv && gEnv->pSystem)
 		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 
 	m_pLog->Shutdown();

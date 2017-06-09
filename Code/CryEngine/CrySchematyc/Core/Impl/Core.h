@@ -117,5 +117,8 @@ private:
 	std::unique_ptr<CLogRecorder>     m_pLogRecorder;
 	std::unique_ptr<CSettingsManager> m_pSettingsManager;
 	std::unique_ptr<CUpdateScheduler> m_pUpdateScheduler;
+
+public:
+	static SSystemGlobalEnvironment * s_pEnv;
 };
 } // Schematyc

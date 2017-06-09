@@ -19,6 +19,8 @@ struct CVars
 	static int    sc_RunUnitTests;
 	static ICVar* sc_ExperimentalFeatures;
 
+	static SSystemGlobalEnvironment * s_pEnv;
+
 	static void               Register();
 	static void               Unregister();
 
