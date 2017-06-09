@@ -13,12 +13,14 @@ USE_CRYPLUGIN_FLOWNODES
 IEntityRegistrator* IEntityRegistrator::g_pFirst = nullptr;
 IEntityRegistrator* IEntityRegistrator::g_pLast = nullptr;
 
+static SSystemGlobalEnvironment * s_pEnv = gEnv;
+
 class CSystemEventListener : public ISystemEventListener
 {
 public:
 	~CSystemEventListener()
 	{
-		if(gEnv->pSystem)
+		if(gEnv && gEnv == s_pEnv && gEnv->pSystem)
 			gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 	}
 

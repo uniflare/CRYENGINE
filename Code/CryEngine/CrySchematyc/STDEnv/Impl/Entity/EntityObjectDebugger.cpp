@@ -88,7 +88,7 @@ CEntityObjectDebugger::CEntityObjectDebugger()
 
 CEntityObjectDebugger::~CEntityObjectDebugger()
 {
-	if (gEnv->pConsole != nullptr)
+	if (gEnv && CSTDEnv::s_pEnv == gEnv && gEnv->pSystem)
 	{
 		gEnv->pConsole->UnregisterVariable("sc_EntityDebugConfig");
 		gEnv->pConsole->UnregisterVariable("sc_EntityDebugFilter");

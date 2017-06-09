@@ -23,5 +23,7 @@ public:
 private:
 
 	bool m_bLoadingLevel;
+
+	static SSystemGlobalEnvironment *	s_pEnv;
 };
 } // Schematyc

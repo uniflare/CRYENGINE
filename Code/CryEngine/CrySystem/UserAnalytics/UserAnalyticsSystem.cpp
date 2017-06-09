@@ -21,7 +21,13 @@ CUserAnalyticsSystem::CUserAnalyticsSystem()
 	ICryPluginManager* pPluginManager = GetISystem()->GetIPluginManager();
 	if (pPluginManager != nullptr)
 	{
-		const bool bSuccess = pPluginManager->LoadPluginFromDisk(ICryPluginManager::EPluginType::EPluginType_CPP, "CryUserAnalytics", "Plugin_CryUserAnalytics");
+#ifdef _LIB
+#define BOOL_IS_DEFINED_LIB true
+#else
+#define BOOL_IS_DEFINED_LIB false
+#endif
+		const bool bSuccess = pPluginManager->LoadPluginFromDisk(ICryPluginManager::EPluginType::EPluginType_CPP, "CryUserAnalytics", "Plugin_CryUserAnalytics", BOOL_IS_DEFINED_LIB);
+#undef BOOL_IS_DEFINED_LIB
 
 		if (bSuccess)
 		{

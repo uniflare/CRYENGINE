@@ -61,5 +61,7 @@ private:
 	std::unique_ptr<CEntityObjectMap>           m_pEntityObjectMap;
 	std::unique_ptr<CEntityObjectDebugger>      m_pEntityObjectDebugger;
 	CConnectionScope                            m_connectionScope;
+public:
+	static SSystemGlobalEnvironment *			s_pEnv;
 };
 } // Schematyc

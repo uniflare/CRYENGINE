@@ -23,17 +23,19 @@ inline bool WantUpdate()
 	return !gEnv->pGameFramework->IsGamePaused() && (gEnv->pSystem->GetSystemGlobalState() == ESYSTEM_GLOBAL_STATE_RUNNING);
 }
 } // Anonymous
+SSystemGlobalEnvironment * CSTDEnv::s_pEnv = gEnv;
 
 CSTDEnv::CSTDEnv()
 	: m_pSystemStateMonitor(new CSystemStateMonitor())
 	, m_pEntityObjectClassRegistry(new CEntityObjectClassRegistry())
 	, m_pEntityObjectMap(new CEntityObjectMap())
 	, m_pEntityObjectDebugger(new CEntityObjectDebugger())
-{}
+{
+}
 
 CSTDEnv::~CSTDEnv()
 {
-	if(gEnv->pSystem)
+	if (gEnv && s_pEnv == gEnv && gEnv->pSystem)
 		gEnv->pSystem->GetISystemEventDispatcher()->RemoveListener(this);
 
 	s_pInstance = nullptr;
