@@ -1,6 +1,9 @@
 # Asset files.
 *.pak
 *.caf
+/gamefps/*
+/gamezero/*
+/gamesdk/*
 
 # Config files
 /user.cfg
@@ -9,6 +12,7 @@
 /.bootstrap*.*
 
 # Temporary files.
+*.sln
 *.log
 *.dmp
 *.pyo
@@ -24,9 +28,8 @@ _WAF_/user_settings.options
 
 # Temporary directories.
 /TestResults/*
-/Solutions/*
+/[Ss]olutions*/
 /.depproj/*
-/project.sln
 /[Ll]og[Bb]ackups
 /[Uu]ser*/
 __pycache__/*
@@ -37,3 +40,6 @@ __pycache__/*
 
 # These are handled elsewhere.
 /Code/SDKs/*
+
+# Custom patches backup
+/git.patches/*
