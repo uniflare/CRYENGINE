@@ -39,7 +39,15 @@ __pycache__/*
 /recode.lic
 
 # These are handled elsewhere.
-/Code/SDKs/*
+/Code/SDKs*
+
+# Manually add distributable Tools
+/Tools*
 
 # Custom patches backup
 /git.patches/*
+
+# Monobridge specific
+/Code/CryManaged/CryMonoBridge/*.dll
+/Code/CryManaged/CryMonoBridge/*.mdb
+/Code/CryManaged/CryMonoBridge/*.cs
