@@ -42,6 +42,17 @@ std::vector<string> ToStringVector(const QStringList& strings)
 	return v;
 }
 
+QStringList ToQStringList(const std::vector<string>& strings)
+{
+	QStringList qsl;
+	qsl.reserve(strings.size());
+	for (const string& s : strings)
+	{
+		qsl.push_back(QtUtil::ToQString(s));
+	}
+	return qsl;
+}
+
 bool CanImportExtension(const CAssetImporter* pAssetImporter, const string& ext)
 {
 	const std::vector<string> exts = pAssetImporter->GetFileExtensions();
@@ -72,6 +83,11 @@ bool CAssetDropHandler::CanImportAny(const std::vector<string>& filePaths)
 	{
 		for (const string& filePath : filePaths)
 		{
+			if (QFileInfo(filePath.c_str()).isDir())
+			{
+				return true;
+			}
+
 			const string ext = string(PathUtil::GetExt(filePath)).MakeLower();
 			if (CanImportExtension(pAssetImporter, ext))
 			{
@@ -90,6 +106,63 @@ bool CAssetDropHandler::CanImportAny(const QStringList& filePaths)
 }
 
 std::vector<CAsset*> CAssetDropHandler::Import(const std::vector<string>& filePaths, const SImportParams& importParams)
+{
+	using namespace Private_AssetDropHandler;
+
+	std::vector<CAsset*> assets;
+	assets.reserve(filePaths.size());
+
+	// Gather all asset extensions available.
+	std::vector<string> importableExtensions;
+	for (CAssetImporter* pAssetImporter : CAssetManager::GetInstance()->GetAssetImporters())
+	{
+		for (const string& ext : pAssetImporter->GetFileExtensions())
+		{
+			importableExtensions.push_back(string("*.") + ext);
+		}
+	}
+
+	std::vector<string> importableFilePaths;
+	importableFilePaths.reserve(filePaths.size());
+
+	// Import each folder
+	for (const string& filepath : filePaths)
+	{
+		if (QFileInfo(filepath.c_str()).isDir())
+		{
+			std::vector<string> directoryImportables;
+			QDirIterator it(filepath.c_str(), ToQStringList(importableExtensions), QDir::Files | QDir::NoDotAndDotDot | QDir::NoSymLinks, QDirIterator::Subdirectories);
+			while (it.hasNext())
+			{
+				directoryImportables.push_back(QtUtil::ToString(it.next()));
+			}
+
+			SImportParams importParams(importParams);
+			importParams.originDirectory = PathUtil::GetParentDirectory(filepath);
+
+			std::vector<CAsset*> Imported = Import(directoryImportables, importParams);
+			assets.insert(assets.end(), std::make_move_iterator(Imported.begin()), std::make_move_iterator(Imported.end()));
+		}
+		else
+		{
+			if (CanImportAny({ filepath }))
+			{
+				importableFilePaths.push_back(filepath);
+			}
+		}
+	}
+
+	// Import the remaining files
+	if (importableFilePaths.size())
+	{
+		std::vector<CAsset*> Imported = ImportFiles(importableFilePaths, importParams);
+		assets.insert(assets.end(), std::make_move_iterator(Imported.begin()), std::make_move_iterator(Imported.end()));
+	}
+
+	return assets;
+}
+
+std::vector<CAsset*> CAssetDropHandler::ImportFiles(const std::vector<string>& filePaths, const SImportParams& importParams)
 {
 	using namespace Private_AssetDropHandler;
 
