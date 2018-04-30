@@ -30,6 +30,7 @@ public:
 	{
 		string outputDirectory;
 		bool bHideDialog = false;
+		string originDirectory;
 	};
 
 public:
@@ -40,6 +41,7 @@ public:
 
 	static std::vector<CAsset*> Import(const std::vector<string>& filePaths, const SImportParams& importParams);
 	static std::vector<CAsset*> Import(const QStringList& filePaths, const SImportParams& importParams);
+	static std::vector<CAsset*> ImportFiles(const std::vector<string>& filePaths, const SImportParams& importParams);
 
 private:
 	static std::vector<CAsset*> ImportExt(const string& ext, const std::vector<string>& filePaths, const SImportParamsEx& importParams);
