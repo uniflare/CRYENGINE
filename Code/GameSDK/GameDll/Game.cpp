@@ -790,6 +790,18 @@ bool CGame::Init(/*IGameFramework* pFramework*/)
 	GetISystem()->GetPlatformOS()->AddListener(this, "CGame");
 	gEnv->pSystem->GetISystemEventDispatcher()->RegisterListener(this);
 
+	// TEMP
+	// Load the action map beforehand (see above)
+	// afterwards load the user's profile whose action maps get merged with default's action map
+	m_pPlayerProfileManager = gEnv->pGameFramework->GetIPlayerProfileManager();
+
+#if !defined(_RELEASE)
+	if (!g_pGameCVars->g_skipStartupSignIn)
+#endif
+	{
+		gEnv->pSystem->GetPlatformOS()->UserDoSignIn(0); // sign in the default user
+	}
+
 	LoadActionMaps("libs/config/defaultProfile.xml");
 	InlineInitializationProcessing("CGame::Init LoadActionMaps");
 	InitScriptBinds();
@@ -835,22 +847,10 @@ bool CGame::Init(/*IGameFramework* pFramework*/)
 	// set game GUID
 	gEnv->pGameFramework->SetGameGUID(CRYENGINE_SDK_GUID);
 
-	// TEMP
-	// Load the action map beforehand (see above)
-	// afterwards load the user's profile whose action maps get merged with default's action map
-	m_pPlayerProfileManager = gEnv->pGameFramework->GetIPlayerProfileManager();
-
 	if (CProfileOptions* profileOptions = GetProfileOptions())
 		profileOptions->Init();
 
 	InlineInitializationProcessing("CGame::Init PlayerProfileManager");
-
-#if !defined(_RELEASE)
-	if (!g_pGameCVars->g_skipStartupSignIn)
-#endif
-	{
-		gEnv->pSystem->GetPlatformOS()->UserDoSignIn(0); // sign in the default user
-	}
 
 #if CRY_PLATFORM_DURANGO
 	XboxLiveGameEvents::CreateGUID(m_playerSessionId);
