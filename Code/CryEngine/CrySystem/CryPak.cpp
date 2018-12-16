@@ -30,6 +30,7 @@
 #include "ZipEncrypt.h"
 #include <CryCore/CryCustomTypes.h>
 #include <CryThreading/IThreadManager.h>
+#include <../key.h>
 
 #if CRY_PLATFORM_LINUX || CRY_PLATFORM_ANDROID || CRY_PLATFORM_APPLE || CRY_PLATFORM_ORBIS
 	#include "System.h"
@@ -438,6 +439,12 @@ CCryPak::CCryPak(IMiniLog* pLog, PakVars* pPakVars, const bool bLvlRes, const IG
 		{
 			ZipEncrypt::Init(pKeyData, keyLen);
 		}
+	}
+#endif
+#ifdef __PUBLICKEY__H__
+	else
+	{
+		ZipEncrypt::Init(g_rsa_public_key_data, sizeof(g_rsa_public_key_data));
 	}
 #endif
 }
